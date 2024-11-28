@@ -1,18 +1,49 @@
-import { useState } from 'react';
-import { GuessHandler, RegistrationHandler, GameCreationHandler, Attempt, GuessRequest, GuessResponse, RegisterRequest, RegisterResponse, CreateGameResponse } from '../../types';
+import { useEffect, useState } from 'react';
+import { GuessHandler, RegistrationHandler, GameCreationHandler, Attempt, GuessRequest, GuessResponse, RegisterRequest, RegisterResponse, CreateGameResponse} from '../../types';
 import { postRequest, registerURL, createGameURL, guessURL } from '../../api';
-import { validWords } from '../../words'
+import { validWords } from '../../words';
+
 export function useGameLogic() {
-  const [userid, setUserid] = useState('');
-  const [attempts, setAttempts] = useState<Array<Attempt>>([]);
-  const [registered, setRegistered] = useState(false);
-  const [created, setCreated] = useState(false);
-  const [gameLost, setGameLost] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
-  const [answer, setAnswer] = useState('');
   const VICTORY = 'GGGGG';
 
+  const [userid, setUserid] = useState<string>(() => localStorage.getItem('userid') || '');
+  const [attempts, setAttempts] = useState<Array<Attempt>>(() => {
+    const storedAttempts = localStorage.getItem('attempts');
+    return storedAttempts ? JSON.parse(storedAttempts) : [];
+  });
+  const [registered, setRegistered] = useState<boolean>(() => {
+    const storedRegistered = localStorage.getItem('registered');
+    return storedRegistered ? JSON.parse(storedRegistered) : false;
+  });
+  const [created, setCreated] = useState<boolean>(() => {
+    const storedCreated = localStorage.getItem('created');
+    return storedCreated ? JSON.parse(storedCreated) : false;
+  });
+  const [gameLost, setGameLost] = useState<boolean>(() => {
+    const storedGameLost = localStorage.getItem('gameLost');
+    return storedGameLost ? JSON.parse(storedGameLost) : false;
+  });
+  const [gameWon, setGameWon] = useState<boolean>(() => {
+    const storedGameWon = localStorage.getItem('gameWon');
+    return storedGameWon ? JSON.parse(storedGameWon) : false;
+  });
+  const [answer, setAnswer] = useState<string>(() => localStorage.getItem('answer') || '');
+
   const resetAttempts = () => setAttempts([]);
+
+  const saveStateToLocalStorage = () => {
+    localStorage.setItem('userid', userid);
+    localStorage.setItem('attempts', JSON.stringify(attempts));
+    localStorage.setItem('registered', JSON.stringify(registered));
+    localStorage.setItem('created', JSON.stringify(created));
+    localStorage.setItem('gameLost', JSON.stringify(gameLost));
+    localStorage.setItem('gameWon', JSON.stringify(gameWon));
+    localStorage.setItem('answer', answer);
+  };
+
+  useEffect(() => {
+    saveStateToLocalStorage();
+  }, [userid, attempts, registered, created, gameLost, gameWon, answer]);
 
   const register: RegistrationHandler = async (username) => {
     const request: RegisterRequest = { name: username, mode: 'wordle' };
@@ -34,6 +65,7 @@ export function useGameLogic() {
     resetAttempts();
     return (await response.json()) as CreateGameResponse;
   };
+
   const isValidWord = (guess: string) => {
     return validWords.includes(guess.toLowerCase());
   };
@@ -41,10 +73,10 @@ export function useGameLogic() {
   const submitGuess: GuessHandler = async (guess) => {
     const request: GuessRequest = { id: userid, guess };
     if (!isValidWord(guess)) {
-      console.log("The word is not in the valid word set. Please try again.");
-      return { feedback: "invalid", answer: "" } as GuessResponse;
+      console.log('The word is not in the valid word set. Please try again.');
+      return { feedback: 'invalid', answer: '' } as GuessResponse;
     }
-  
+
     const response = await postRequest(guessURL, request);
 
     if (response.status === 422) setGameLost(true);
@@ -56,5 +88,5 @@ export function useGameLogic() {
     return data;
   };
 
-  return { setUserid, userid, registered, created, gameLost, gameWon, answer, attempts, register, createGame, submitGuess, resetAttempts };
+  return {setUserid, userid, registered, created, gameLost, gameWon, answer, attempts, register, createGame, submitGuess, resetAttempts,};
 }
