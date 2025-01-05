@@ -1,50 +1,50 @@
-# React + TypeScript + Vite
+# Wordle with React, Vite, and TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a Wordle-inspired learning project built using **React**, **Vite**, and **TypeScript**. The goal of this project was to explore file structure organization, modularity, and the flow of components in a React application.
 
-Currently, two official plugins are available:
+## Features
+- Modular components for reusable and organized code.
+- TypeScript integration for type safety.
+- A file structure designed to separate concerns and improve readability.
+- Key functionalities include word guessing, feedback on attempts, and a simple registration form.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## File Structure
+- **src/Responses**: JSON files for mock responses used in the application.
+- **src/components**:  
+  - **Attempt**: Components for managing guess attempts and feedback.  
+  - **Forms**: Components for user interactions like registration, word creation, and guessing.  
+  - **GameLogic**: Core logic for the Wordle game.  
+  - **Header**: Component for the application's header.  
+- **src/textAssets**: Assets such as word lists and additional configurations.
+- **src/App.tsx**: The main entry point for the React app.
+- **src/api.ts**: Mock or actual API integrations.
+- **src/main.tsx**: The main file to bootstrap the app.
 
-## Expanding the ESLint configuration
+## Tools and Technologies
+- **React** for UI building.
+- **Vite** for fast development and build processes.
+- **TypeScript** for enhanced type checking and better development experience.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Learning Outcomes
+This project served as a hands-on exercise to understand:
+- Component-based architecture in React.
+- Using TypeScript for strongly-typed React applications.
+- Modularizing code for better scalability and maintenance.
 
-- Configure the top-level `parserOptions` property like this:
+## How to Run
+1. Clone this repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open the app in your browser at `http://localhost:5173`.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Feel free to explore the codebase and adapt it for more advanced features!
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
