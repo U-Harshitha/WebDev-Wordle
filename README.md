@@ -34,7 +34,7 @@ This project served as a hands-on exercise to understand:
 ## How to Run
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/U-Harshitha/WebDev-Wordle.git
    ```
 2. Install dependencies:
    ```bash
